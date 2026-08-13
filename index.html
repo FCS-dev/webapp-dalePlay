@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dale Play! App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Prata&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search" />
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div id="encabezado">
+        <h1><a href="index.html">Dale Play!</a></h1>
+        <figure id="logo">
+            <a href="index.html"><img src="assets/imgs/dalealplay-logo.png" alt="dalealplay!"></a>
+        </figure>
+        <span class="material-symbols-outlined">
+            search
+        </span>
+    </div>
+    <form action="#" id="formulario" class="novisible">
+        <fieldset>
+            <div id="filtro">
+                <input type="text" name="texto" id="texto" maxlength="30" autofocus>
+                <select name="tipo" id="tipo">
+                    <option value="pelicula" selected>Titulo</option>
+                    <option value="persona">Actor / Actriz</option>
+                    <option value="tendencia">Tendencias hoy</option>
+                </select>
+                <button type="submit" id="buscar">Buscar</button>
+                <button id="regresar">Regresar</button>
+            </div>
+        </fieldset>
+    </form>
+    <div id="principal">
+
+    </div>
+    <dialog id="mi-modal">
+    </dialog>
+    <script type="module" src="./js/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+# API keys y configuración sensible
+config.js
+
+# VS Code
+.vscode/
+
+# Editor
+*.log
+
+# Sistemas operativos
+.DS_Store
+Thumbs.db
