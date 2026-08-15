@@ -1,0 +1,12 @@
+{
+  "detector": {
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "Material Symbols Outlined",
+        "createdAt": "2026-08-13T00:00:00.000Z",
+        "reason": "Icon font de Material Symbols, no tipografia de texto; documentada en DESIGN.md Components/Navigation."
+      }
+    ]
+  }
+}

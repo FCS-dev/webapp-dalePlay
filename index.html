@@ -4,7 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dale Play! App</title>
+    <title>Dale Play! — Descubrí películas</title>
+    <meta name="description"
+        content="Dale Play! te acerca la cartelera, los próximos estrenos, los populares y los mejor calificados. Buscá por título o por actor y descubrí qué ver hoy.">
+    <meta property="og:title" content="Dale Play!">
+    <meta property="og:description" content="Descubrí películas en español: cartelera, estrenos y tendencias del día.">
+    <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -21,29 +26,51 @@
         <figure id="logo">
             <a href="index.html"><img src="assets/imgs/dalealplay-logo.png" alt="dalealplay!"></a>
         </figure>
-        <span class="material-symbols-outlined">
+        <button id="btn-buscar" class="material-symbols-outlined" aria-expanded="false" aria-controls="formulario"
+            aria-label="Buscar películas">
             search
-        </span>
+        </button>
     </div>
     <form action="#" id="formulario" class="novisible">
         <fieldset>
             <div id="filtro">
-                <input type="text" name="texto" id="texto" maxlength="30" autofocus>
+                <input type="text" name="texto" id="texto" maxlength="30" autocomplete="off"
+                    placeholder="Escribí un título o un actor">
                 <select name="tipo" id="tipo">
                     <option value="pelicula" selected>Titulo</option>
                     <option value="persona">Actor / Actriz</option>
                     <option value="tendencia">Tendencias hoy</option>
                 </select>
                 <button type="submit" id="buscar">Buscar</button>
-                <button id="regresar">Regresar</button>
+                <button type="button" id="regresar">Regresar</button>
             </div>
         </fieldset>
     </form>
+    <div id="aviso" class="novisible" role="status" aria-live="polite" aria-atomic="true"></div>
     <div id="principal">
 
     </div>
-    <dialog id="mi-modal">
+    <dialog id="mi-modal" aria-labelledby="titulo-modal">
     </dialog>
+    <footer>
+        <h2 class="pie-titulo"><a href="index.html">Dale Play!</a></h2>
+        <p class="pie-tagline">Tu cartelera, los próximos estrenos y las tendencias del día, a oscuras.</p>
+        <nav class="pie-nav" aria-label="Enlaces del pie de página">
+            <ul>
+                <li><a href="#encabezado">Inicio</a></li>
+                <li><a href="#formulario" id="pie-buscar">Buscar</a></li>
+            </ul>
+        </nav>
+        <div class="pie-creditos">
+            <p>Los datos y artes pertenecen a <a href="https://www.themoviedb.org" target="_blank"
+                    rel="noopener noreferrer">TMDB</a>.</p>
+            <small>
+                <p>Dale Play! usa la API de TMDB pero no está respaldado ni certificado por TMDB.</p>
+            </small>
+            <p class="pie-copy">© 2026 Franco Calderón · Proyecto educativo sin fines de lucro.
+            </p>
+        </div>
+    </footer>
     <script type="module" src="./js/script.js"></script>
 </body>
 
