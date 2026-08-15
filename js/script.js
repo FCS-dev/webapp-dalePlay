@@ -2,6 +2,8 @@ import {
   API_KEY,
   BASE_URL,
   IMG_URL,
+  IMG_URL_CARD,
+  IMG_URL_HERO,
   GENEROS_PELICULAS_URL,
   API_PELI_POPULAR,
   API_PELI_NOW_PLAYING,
@@ -23,10 +25,20 @@ const miModal = document.querySelector("#mi-modal");
 
 let ultimaCardFoco = null;
 
+// Controladores para cancelar peticiones obsoletas (búsqueda, home y modal).
+let controladorBusqueda = null;
+let controladorHome = null;
+let controladorModal = null;
+
+// Último motivo de fallo de red/API para mensajes de error específicos.
+let motivoError = "generic";
+
 // Cache de las cuatro secciones del home para no re-pedir la API en cada vuelta.
 const cacheBienvenida = {};
 
-const todosLosGeneros = (await getTotalDeGeneros()) ?? [];
+// La lista de géneros se pide en paralelo con las secciones del home.
+const promesaGeneros = getTotalDeGeneros();
+let todosLosGeneros = [];
 
 // Anular evento submit
 formulario.addEventListener("submit", (e) => {
@@ -46,6 +58,8 @@ btnBuscar.addEventListener("click", async () => {
     "aria-expanded",
     String(!formulario.classList.contains("novisible")),
   );
+  controladorBusqueda?.abort();
+  controladorHome?.abort();
   divContenedor.innerHTML = "";
   if (formulario.classList.contains("novisible")) {
     await genCardsBienvenida(divContenedor);
@@ -69,13 +83,19 @@ btnRegresar.addEventListener("click", async () => {
   formulario.reset();
   formulario.classList.add("novisible");
   btnBuscar.setAttribute("aria-expanded", "false");
+  controladorBusqueda?.abort();
+  controladorHome?.abort();
   divContenedor.innerHTML = "";
   await genCardsBienvenida(divContenedor);
 });
 
 // Restaura el foco a la card que abrió el modal al cerrarlo
 miModal.addEventListener("close", () => {
-  if (ultimaCardFoco) ultimaCardFoco.focus();
+  requestAnimationFrame(() => {
+    if (ultimaCardFoco && document.contains(ultimaCardFoco)) {
+      ultimaCardFoco.focus();
+    }
+  });
 });
 
 // Cierra el modal con la "X" o al hacer click fuera del contenido
@@ -123,55 +143,68 @@ async function realizarBusqueda() {
   const url = criteriaDisponible(criterio, textoABuscar);
   if (url === null) return;
 
+  controladorBusqueda?.abort();
+  controladorBusqueda = new AbortController();
+  const signal = controladorBusqueda.signal;
+
+  const botonBuscarEnviar = document.querySelector("#buscar");
   mostrarAviso("Buscando…");
-  const data = await getDatos(url);
-  if (data === null) {
-    mostrarAviso("No se pudo conectar con TMDB. Revisa tu conexión.", {
-      retry: () => realizarBusqueda(),
-    });
-    return;
-  }
+  botonBuscarEnviar.disabled = true;
+  try {
+    const data = await getDatos(url, { signal });
+    if (signal.aborted) return;
 
-  divContenedor.innerHTML = "";
-  limpiarAviso();
-
-  const div_filtro = document.createElement("div");
-  const h2_filtro = document.createElement("h2");
-  div_filtro.classList.add("contenedor");
-  const env_filtro = envolverCarrusel(div_filtro);
-
-  if (criterio !== "tendencia") {
-    const total = data.total_results ?? data.results?.length ?? 0;
-    h2_filtro.classList.add("estado-busqueda");
-    h2_filtro.textContent =
-      total > 0
-        ? `Resultados para «${textoABuscar}» (${total})`
-        : `Sin resultados para «${textoABuscar}»`;
-  } else {
-    h2_filtro.textContent = "Hoy, son tendencia:";
-  }
-
-  divContenedor.appendChild(h2_filtro);
-  divContenedor.appendChild(env_filtro);
-
-  if (data.results?.length > 0) {
-    genCards(div_filtro, criterio, data.results);
-    actualizarFlechas(div_filtro);
-  } else {
-    env_filtro.classList.add("novisible");
-    const vacio = document.createElement("div");
-    vacio.classList.add("estado-vacio");
-    if (criterio === "tendencia") {
-      vacio.innerHTML = `
-            <p>Hoy no hay tendencias para mostrar.</p>
-            <p>Prueba de nuevo más tarde.</p>`;
-    } else {
-      const tipo = criterio === "pelicula" ? "películas" : "personas";
-      vacio.innerHTML = `
-            <p>No encontramos ${tipo} con «${escapeHTML(textoABuscar)}».</p>
-            <p>Prueba otra palabra o mira las tendencias del día.</p>`;
+    if (data === null) {
+      mostrarAviso(
+        mensajeDeError("No se pudo conectar con TMDB. Revisa tu conexión."),
+        { retry: () => realizarBusqueda(), tipo: "error" },
+      );
+      return;
     }
-    divContenedor.appendChild(vacio);
+
+    divContenedor.innerHTML = "";
+    limpiarAviso();
+
+    const div_filtro = document.createElement("div");
+    const h2_filtro = document.createElement("h2");
+    div_filtro.classList.add("contenedor");
+    const env_filtro = envolverCarrusel(div_filtro);
+
+    if (criterio !== "tendencia") {
+      const total = data.total_results ?? data.results?.length ?? 0;
+      h2_filtro.classList.add("estado-busqueda");
+      h2_filtro.textContent =
+        total > 0
+          ? `Resultados para «${textoABuscar}» (${total})`
+          : `Sin resultados para «${textoABuscar}»`;
+    } else {
+      h2_filtro.textContent = "Hoy, son tendencia:";
+    }
+
+    divContenedor.appendChild(h2_filtro);
+    divContenedor.appendChild(env_filtro);
+
+    if (data.results?.length > 0) {
+      genCards(div_filtro, criterio, data.results);
+      actualizarFlechas(div_filtro);
+    } else {
+      env_filtro.classList.add("novisible");
+      const vacio = document.createElement("div");
+      vacio.classList.add("estado-vacio");
+      if (criterio === "tendencia") {
+        vacio.innerHTML = `
+              <p>Hoy no hay tendencias para mostrar.</p>
+              <p>Prueba de nuevo más tarde.</p>`;
+      } else {
+        const tipo = criterio === "pelicula" ? "películas" : "personas";
+        vacio.innerHTML = `
+              <p>No encontramos ${tipo} con «${escapeHTML(textoABuscar)}».</p>
+              <p>Prueba otra palabra o mira las tendencias del día.</p>`;
+      }
+      divContenedor.appendChild(vacio);
+    }
+  } finally {
+    botonBuscarEnviar.disabled = false;
   }
 }
 
@@ -349,7 +382,8 @@ function prepararIndicadorScroll() {
 /**
  * Muestra un mensaje de estado en la región #aviso (aria-live).
  * @param {String} mensaje Texto a mostrar.
- * @param {Object} opciones Opcional: { retry: Function } agrega un botón "Reintentar".
+ * @param {Object} opciones Opcional: { retry: Function } agrega un botón "Reintentar";
+ * { tipo: "error" } tiñe la barra con la capa semántica de error.
  */
 function mostrarAviso(mensaje, opciones = {}) {
   const aviso = document.querySelector("#aviso");
@@ -357,6 +391,7 @@ function mostrarAviso(mensaje, opciones = {}) {
   const retry = opciones.retry
     ? `<button type="button" id="btn-reintentar">Reintentar</button>`
     : "";
+  aviso.classList.toggle("aviso--error", opciones.tipo === "error");
   aviso.innerHTML = `<span>${escapeHTML(mensaje)}</span>${retry}`;
   aviso.classList.remove("novisible");
   const btn = aviso.querySelector("#btn-reintentar");
@@ -369,6 +404,7 @@ function mostrarAviso(mensaje, opciones = {}) {
 function limpiarAviso() {
   const aviso = document.querySelector("#aviso");
   if (!aviso) return;
+  aviso.classList.remove("aviso--error");
   aviso.innerHTML = "";
   aviso.classList.add("novisible");
 }
@@ -379,9 +415,9 @@ function limpiarAviso() {
  * @param {String} clave Identificador de cache.
  * @returns {Promise<Object|null>} Datos o null si la API falló.
  */
-async function getDatosCacheado(url, clave) {
+async function getDatosCacheado(url, clave, signal) {
   if (cacheBienvenida[clave]) return cacheBienvenida[clave];
-  const data = await getDatos(url);
+  const data = await getDatos(url, { signal });
   if (data) cacheBienvenida[clave] = data;
   return data;
 }
@@ -400,7 +436,7 @@ const criteriaDisponible = (criteria, texto) => {
   };
 
   if (!Object.keys(opciones).includes(criteria)) {
-    mostrarAviso("No se reconoce ese criterio de búsqueda.");
+    mostrarAviso("No se reconoce ese criterio de búsqueda.", { tipo: "error" });
     return null;
   }
   return opciones[criteria] ? opciones[criteria] : null;
@@ -487,7 +523,7 @@ function buildCardPelicula(peli, posicion = 0) {
   const titulo = peli.title || peli.original_title || "";
   card.setAttribute("aria-label", `Ver detalle de ${titulo}`);
   const urlImagen = peli.poster_path
-    ? `${IMG_URL}${peli.poster_path}`
+    ? `${IMG_URL_CARD}${peli.poster_path}`
     : `./assets/imgs/no-image-placeholder.png`;
   const anyo = `${peli.release_date ? peli.release_date.trim().slice(0, 4) : "(Sin info)"}`;
   const listaDeGeneros = `${getGeneros(peli.genre_ids)}`;
@@ -499,7 +535,7 @@ function buildCardPelicula(peli, posicion = 0) {
   card.innerHTML = `
             ${rank}
             <figure>
-                <img src="${urlImagen}" alt="${escapeHTML(titulo)}">
+                <img src="${urlImagen}" alt="${escapeHTML(titulo)}" loading="lazy" decoding="async">
             </figure>
             <div class="glass">
             <h3>${escapeHTML(titulo)}</h3>
@@ -537,7 +573,7 @@ function buildHero(lista) {
     : "";
 
   hero.innerHTML = `
-            <img class="hero-fondo" src="${IMG_URL}${peli.backdrop_path}" alt="" aria-hidden="true">
+            <img class="hero-fondo" src="${IMG_URL_HERO}${peli.backdrop_path}" alt="" aria-hidden="true" fetchpriority="high" decoding="async">
             <div class="hero-velo" aria-hidden="true"></div>
             <div class="hero-contenido">
                 <h2 class="hero-titulo">${escapeHTML(titulo)}</h2>
@@ -563,11 +599,11 @@ function buildCardPersona(actor) {
   const nombrePersona = `${actor.name}`;
   card.setAttribute("aria-label", `Ver perfil de ${nombrePersona}`);
   const urlImagen = actor.profile_path
-    ? `${IMG_URL}${actor.profile_path}`
+    ? `${IMG_URL_CARD}${actor.profile_path}`
     : `./assets/imgs/no-image-placeholder.png`;
   card.innerHTML = `
             <figure>
-                <img src="${urlImagen}" alt="${escapeHTML(nombrePersona)}">
+                <img src="${urlImagen}" alt="${escapeHTML(nombrePersona)}" loading="lazy" decoding="async">
             </figure>
             <div class="glass">
             <h3>${escapeHTML(nombrePersona)}</h3>
@@ -577,22 +613,56 @@ function buildCardPersona(actor) {
 }
 
 /**
- * Devuelve todo el objeto de la API.
- * @param {String} url Cadena de texto que tiene la URL -construida- para poder llamar a la API
- * @returns {Object} Devuelve el objeto completo que se trae desde la API. Si hay error, devuelve null
+ * Fetch JSON con manejo de estados HTTP y cancelación.
+ * @param {String} url URL a pedir.
+ * @param {Object} opciones Opcional: { signal } para abortar.
+ * @returns {Promise<Object|null>} Datos parseados, o null si falló o se canceló.
  */
-async function getDatos(url) {
+async function pedirJson(url, { signal } = {}) {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { signal });
     if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
+      if (response.status === 401 || response.status === 403) {
+        motivoError = "auth";
+      } else if (response.status === 429) {
+        motivoError = "rate_limit";
+      } else {
+        motivoError = "generic";
+      }
+      return null;
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error(`Algo salio al cargar las peliculas... ${error}`);
+    if (error.name === "AbortError") return null;
+    motivoError = "network";
+    console.error(`Algo salio mal al cargar los datos... ${error}`);
     return null;
   }
+}
+
+/**
+ * Devuelve un mensaje de error acorde al último fallo de red/API.
+ * @param {String} fallback Mensaje genérico por defecto.
+ * @returns {String} Mensaje específico si hay un motivo conocido.
+ */
+function mensajeDeError(fallback) {
+  const mensajes = {
+    auth: "No se pudo autenticar con TMDB. Revisa la clave en config.js.",
+    rate_limit:
+      "TMDB está limitando las solicitudes. Espera un momento y prueba de nuevo.",
+    network: "No se pudo conectar con TMDB. Revisa tu conexión.",
+  };
+  return mensajes[motivoError] ?? fallback;
+}
+
+/**
+ * Devuelve todo el objeto de la API.
+ * @param {String} url Cadena de texto que tiene la URL -construida- para poder llamar a la API
+ * @param {Object} opciones Opcional: { signal } para abortar.
+ * @returns {Object} Devuelve el objeto completo que se trae desde la API. Si hay error, devuelve null
+ */
+async function getDatos(url, opciones) {
+  return pedirJson(url, opciones);
 }
 
 /**
@@ -600,17 +670,8 @@ async function getDatos(url) {
  * @returns {Array} Lista de los géneros. "null" si no se encuentra la información
  */
 async function getTotalDeGeneros() {
-  try {
-    const response = await fetch(GENEROS_PELICULAS_URL);
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
-    const data = await response.json();
-    return data.genres;
-  } catch (error) {
-    console.error(`Algo salio mal al cargar los generos... ${error}`);
-    return null;
-  }
+  const data = await pedirJson(GENEROS_PELICULAS_URL);
+  return data ? data.genres : null;
 }
 
 /**
@@ -640,17 +701,32 @@ function getGeneros(lista) {
  * @param {HTMLElement} gallery - Contenedor donde se insertarán los divs y cards
  */
 async function genCardsBienvenida(gallery) {
-  const fragment = document.createDocumentFragment();
+  controladorHome?.abort();
+  controladorHome = new AbortController();
+  const signal = controladorHome.signal;
+
+  gallery.innerHTML = "";
 
   mostrarAviso("Cargando la sala…");
 
-  const [listaNowPlaying, listaUpcomings, listaPopulares, listaTopRated] =
-    await Promise.all([
-      getDatosCacheado(API_PELI_NOW_PLAYING, "now_playing"),
-      getDatosCacheado(API_PELI_UPCOMING, "upcoming"),
-      getDatosCacheado(API_PELI_POPULAR, "popular"),
-      getDatosCacheado(API_PELI_TOP_RATED, "top_rated"),
-    ]);
+  const [generos, listaNowPlaying] = await Promise.all([
+    promesaGeneros,
+    getDatosCacheado(API_PELI_NOW_PLAYING, "now_playing", signal),
+  ]);
+  if (generos) todosLosGeneros = generos;
+
+  if (signal.aborted) return;
+
+  const hero = buildHero(listaNowPlaying);
+  if (hero) gallery.appendChild(hero);
+
+  const [listaUpcomings, listaPopulares, listaTopRated] = await Promise.all([
+    getDatosCacheado(API_PELI_UPCOMING, "upcoming", signal),
+    getDatosCacheado(API_PELI_POPULAR, "popular", signal),
+    getDatosCacheado(API_PELI_TOP_RATED, "top_rated", signal),
+  ]);
+
+  if (signal.aborted) return;
 
   if (
     !listaNowPlaying &&
@@ -658,14 +734,14 @@ async function genCardsBienvenida(gallery) {
     !listaPopulares &&
     !listaTopRated
   ) {
-    mostrarAviso("No se pudo cargar la cartelera. Revisa tu conexión.", {
-      retry: () => genCardsBienvenida(gallery),
-    });
+    mostrarAviso(
+      mensajeDeError("No se pudo cargar la cartelera. Revisa tu conexión."),
+      { retry: () => genCardsBienvenida(gallery), tipo: "error" },
+    );
     return;
   }
 
-  const hero = buildHero(listaNowPlaying);
-  if (hero) fragment.appendChild(hero);
+  const fragment = document.createDocumentFragment();
 
   const secciones = [
     { titulo: "Top 10 · En cartelera", lista: listaNowPlaying },
@@ -695,7 +771,6 @@ async function genCardsBienvenida(gallery) {
     }
   });
 
-  gallery.innerHTML = "";
   gallery.appendChild(fragment);
   tracks.forEach((track) => actualizarFlechas(track));
   limpiarAviso();
@@ -711,34 +786,105 @@ async function genModal(id) {
   const tipo = id[0].toUpperCase();
   const idBuscado = id.slice(1);
 
+  controladorModal?.abort();
+  controladorModal = new AbortController();
+  const signal = controladorModal.signal;
+
+  abrirModalEnCarga();
+
+  let ficha = null;
+  let render = null;
+
   if (tipo === "A") {
-    const ficha = await getActor(idBuscado);
-    if (!ficha) {
-      mostrarAviso("No se pudo cargar la información del actor/actriz.", {
-        retry: () => genModal(id),
-      });
-      return;
-    }
+    ficha = await getActor(idBuscado, { signal });
+    render = renderModalActor;
+  } else if (tipo === "P") {
+    ficha = await getPelicula(idBuscado, { signal });
+    render = renderModalPelicula;
+  } else {
+    renderModalError("No se reconoce el elemento seleccionado.");
+    return;
+  }
 
-    const urlImgFondo = ficha.profile_path
-      ? `${IMG_URL}${ficha.profile_path}`
-      : "";
-    miModal.style.setProperty(
-      "--backdrop",
-      urlImgFondo ? `url(${urlImgFondo})` : "none",
-    );
+  if (signal.aborted) return;
 
-    const urlPoster = ficha.profile_path
-      ? `${IMG_URL}${ficha.profile_path}`
-      : "";
+  if (!ficha) {
+    renderModalError(mensajeDeError("No se pudo cargar la información."), {
+      retry: () => genModal(id),
+    });
+    return;
+  }
 
-    const peliculas = ordenarPorFechaLanzamiento(ficha.movie_credits?.cast);
+  render(ficha);
+}
 
-    miModal.innerHTML = `
+/**
+ * Abre el modal con un estado de carga inmediato mientras se pide la ficha.
+ */
+function abrirModalEnCarga() {
+  miModal.style.setProperty("--backdrop", "none");
+  miModal.innerHTML = `
+            <button id="btn-cerrar-modal" type="button" aria-label="Cerrar">X</button>
+            <div id="contenido-modal">
+            <h2 id="titulo-modal">Cargando la ficha…</h2>
+        </div>
+            `;
+  if (miModal.open) {
+    miModal.focus();
+  } else {
+    miModal.showModal();
+  }
+}
+
+/**
+ * Muestra un error dentro del modal, con un botón de Reintentar opcional.
+ * @param {String} mensaje Texto del error.
+ * @param {Object} opciones Opcional: { retry: Function }.
+ */
+function renderModalError(mensaje, opciones = {}) {
+  const retry = opciones.retry
+    ? `<button type="button" class="btn-reintentar-modal">Reintentar</button>`
+    : "";
+  miModal.style.setProperty("--backdrop", "none");
+  miModal.innerHTML = `
+            <button id="btn-cerrar-modal" type="button" aria-label="Cerrar">X</button>
+            <div id="contenido-modal">
+            <h2 id="titulo-modal">Ups…</h2>
+            <p class="error-modal">${escapeHTML(mensaje)}</p>
+            ${retry}
+        </div>
+            `;
+  const btn = miModal.querySelector(".btn-reintentar-modal");
+  if (btn && opciones.retry) btn.addEventListener("click", opciones.retry);
+  if (miModal.open) {
+    miModal.focus();
+  } else {
+    miModal.showModal();
+  }
+}
+
+/**
+ * Renderiza la ficha de un actor/actriz en el modal.
+ * @param {Object} ficha Datos de la persona.
+ */
+function renderModalActor(ficha) {
+  const urlImgFondo = ficha.profile_path
+    ? `${IMG_URL}${ficha.profile_path}`
+    : "";
+  miModal.style.setProperty(
+    "--backdrop",
+    urlImgFondo ? `url(${urlImgFondo})` : "none",
+  );
+
+  const urlPoster = ficha.profile_path ? `${IMG_URL}${ficha.profile_path}` : "";
+
+  const peliculas = ordenarPorFechaLanzamiento(ficha.movie_credits?.cast);
+
+  miModal.innerHTML = `
             <button id="btn-cerrar-modal" type="button" aria-label="Cerrar">X</button>
             <div id="contenido-modal">
             <h2 id="titulo-modal">${escapeHTML(ficha.name)}</h2>
-            ${urlPoster ? `<img class="poster-modal" src="${urlPoster}" alt="${escapeHTML(ficha.name)}">` : ""}
+            ${urlPoster ? `<img class="poster-modal" src="${urlPoster}" alt="${escapeHTML(ficha.name)}" decoding="async">` : ""}
             <p><strong>Biografía:</strong></p>
             <div class="texto-ampliable"><p class="biografia">${escapeHTML(ficha.biography) || "(Sin datos para mostrar)"}</p></div>
             <p><strong>Lugar de Nacimiento:</strong></p>
@@ -749,42 +895,42 @@ async function genModal(id) {
              <ul class="creditos">${peliculas.map((p) => `<li><a href="#" class="enlace-credito" data-credito-id="P${p.id}" title="${escapeHTML(p.title)}">${escapeHTML(p.title)}</a> <span class="credito-anio">${escapeHTML(p.release_date)}</span></li>`).join("") || "(Sin datos para mostrar)"}</ul>
         </div>
             `;
-    if (miModal.open) {
-      miModal.focus();
-    } else {
-      miModal.showModal();
-    }
-    prepararLeerMas();
-    prepararIndicadorScroll();
-  } else if (tipo === "P") {
-    const ficha = await getPelicula(idBuscado);
-    if (!ficha) {
-      mostrarAviso("No se pudo cargar la información de la película.", {
-        retry: () => genModal(id),
-      });
-      return;
-    }
-    const titulo = ficha.title || ficha.original_title || "";
-    const valoracion = ficha.vote_average
-      ? ficha.vote_average.toFixed(1)
-      : "(Sin info)";
-    const descripGeneros = (ficha.genres ?? []).map((g) => g.name).join(", ");
+  if (miModal.open) {
+    miModal.focus();
+  } else {
+    miModal.showModal();
+  }
+  prepararLeerMas();
+  prepararIndicadorScroll();
+  refrescarModalTrasFuentes();
+}
 
-    const urlImgFondo = ficha.backdrop_path
-      ? `${IMG_URL}${ficha.backdrop_path}`
-      : "";
-    miModal.style.setProperty(
-      "--backdrop",
-      urlImgFondo ? `url(${urlImgFondo})` : "none",
-    );
+/**
+ * Renderiza la ficha de una película en el modal.
+ * @param {Object} ficha Datos de la película.
+ */
+function renderModalPelicula(ficha) {
+  const titulo = ficha.title || ficha.original_title || "";
+  const valoracion = ficha.vote_average
+    ? ficha.vote_average.toFixed(1)
+    : "(Sin info)";
+  const descripGeneros = (ficha.genres ?? []).map((g) => g.name).join(", ");
 
-    const urlPoster = ficha.poster_path ? `${IMG_URL}${ficha.poster_path}` : "";
+  const urlImgFondo = ficha.backdrop_path
+    ? `${IMG_URL}${ficha.backdrop_path}`
+    : "";
+  miModal.style.setProperty(
+    "--backdrop",
+    urlImgFondo ? `url(${urlImgFondo})` : "none",
+  );
 
-    miModal.innerHTML = `
+  const urlPoster = ficha.poster_path ? `${IMG_URL}${ficha.poster_path}` : "";
+
+  miModal.innerHTML = `
             <button id="btn-cerrar-modal" type="button" aria-label="Cerrar">X</button>
             <div id="contenido-modal">
             <h2 id="titulo-modal">${escapeHTML(titulo)}</h2>
-            ${urlPoster ? `<img class="poster-modal" src="${urlPoster}" alt="${escapeHTML(titulo)}">` : ""}
+            ${urlPoster ? `<img class="poster-modal" src="${urlPoster}" alt="${escapeHTML(titulo)}" decoding="async">` : ""}
             <p><strong>Sinópsis:</strong></p>
             <div class="texto-ampliable"><p class="sinopsis">${escapeHTML(ficha.overview)}</p></div>
             <p><strong>Fecha Lanzamiento: </strong>${escapeHTML(ficha.release_date)}</p>
@@ -794,17 +940,20 @@ async function genModal(id) {
              <ul class="creditos">${ficha.credits?.cast?.map((p) => `<li><a href="#" class="enlace-credito" data-credito-id="A${p.id}" title="${escapeHTML(p.name)}">${escapeHTML(p.name)}</a> <span class="credito-anio">${escapeHTML(p.character)}</span></li>`).join("") || "(Sin datos para mostrar)"}</ul>
         </div>
             `;
-    if (miModal.open) {
-      miModal.focus();
-    } else {
-      miModal.showModal();
-    }
-    prepararLeerMas();
-    prepararIndicadorScroll();
+  if (miModal.open) {
+    miModal.focus();
   } else {
-    mostrarAviso("No se reconoce el elemento seleccionado.");
-    return;
+    miModal.showModal();
   }
+  prepararLeerMas();
+  prepararIndicadorScroll();
+  refrescarModalTrasFuentes();
+}
+
+/**
+ * Re-mide el contenido del modal cuando terminan de cargar las tipografías.
+ */
+function refrescarModalTrasFuentes() {
   document.fonts?.ready?.then(() => {
     prepararLeerMas();
     prepararIndicadorScroll();
@@ -814,41 +963,21 @@ async function genModal(id) {
 /**
  * Petición asincrona de la info de película, según el idPelicula solicitado.
  * @param {String} idPelicula
+ * @param {Object} opciones Opcional: { signal } para abortar.
  * @returns {Object} info de la película. Si sucede error, devuelve null.
  */
-async function getPelicula(idPelicula) {
+async function getPelicula(idPelicula, { signal } = {}) {
   const url = `${API_PELI_ID}${idPelicula}?append_to_response=credits&api_key=${API_KEY}&${API_LANGUAGE}`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(
-      `Algo salio mal al cargar la película ${idPelicula}... ${error}`,
-    );
-    return null;
-  }
+  return pedirJson(url, { signal });
 }
 
 /**
  * Petición asincrona de la info del actor, según el idActor solicitado.
  * @param {String} idActor
+ * @param {Object} opciones Opcional: { signal } para abortar.
  * @returns {Object} info del actor. Si sucede error, devuelve null.
  */
-async function getActor(idActor) {
+async function getActor(idActor, { signal } = {}) {
   const url = `${API_ACTOR_ID}${idActor}?api_key=${API_KEY}&${API_LANGUAGE}&append_to_response=movie_credits`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(`Algo salio mal al cargar el actor ${idActor}... ${error}`);
-    return null;
-  }
+  return pedirJson(url, { signal });
 }

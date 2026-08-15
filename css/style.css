@@ -17,8 +17,13 @@
   --font-color-dark: #ccc;
   --font-color-title-light: rgb(200, 50, 50);
   --font-color-title-dark: rgb(125, 125, 255);
+  --font-color-title-hover: rgb(180, 180, 255);
   --bg-card-dark: rgba(80, 80, 80, .3);
   --bg-card-light: rgba(245, 245, 245, .3);
+  --color-error: rgb(255, 190, 190);
+  --color-error-bg: rgba(200, 50, 50, .14);
+  --color-error-border: rgba(200, 50, 50, .35);
+  --scrollbar-thumb: rgb(95, 95, 140);
 }
 
 body {
@@ -33,6 +38,8 @@ body {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 #principal {
@@ -53,7 +60,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3a3a3a;
+  background: var(--scrollbar-thumb);
   border-radius: 5px;
   border: 2px solid #000;
 }
@@ -91,7 +98,7 @@ h2 {
 h2.seccion {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
   line-height: 1.2;
   color: var(--font-color-title-light);
   padding: 2.5rem 1rem 1rem;
@@ -131,6 +138,8 @@ h2.seccion::after {
 #btn-buscar {
   height: auto;
   width: auto;
+  min-width: 44px;
+  min-height: 44px;
   margin: 0;
   padding: .25rem;
   background: none;
@@ -139,6 +148,9 @@ h2.seccion::after {
   border-radius: 5px;
   font-size: 2.1rem;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #btn-buscar:hover {
@@ -183,8 +195,7 @@ select {
 input,
 select,
 button {
-  height: 2.5rem;
-  border: #fff;
+  height: 2.75rem;
   border-radius: 5px;
   font-size: 1.2rem;
   margin-block: 0.5rem;
@@ -212,6 +223,16 @@ button:hover {
 
 button:active {
   filter: brightness(.92);
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: default;
+  filter: none;
+}
+
+button:focus-visible {
+  outline-color: #fff;
 }
 
 #regresar {
@@ -248,8 +269,8 @@ button:active {
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border-radius: 50%;
   background: rgba(0, 0, 0, .5);
@@ -272,8 +293,10 @@ button:active {
   right: .25rem;
 }
 
-.carrusel-btn:hover:not(:disabled) {
-  background: rgba(125, 125, 255, .85);
+@media (hover: hover) {
+  .carrusel-btn:hover:not(:disabled) {
+    background: rgba(125, 125, 255, .85);
+  }
 }
 
 .carrusel-btn:disabled {
@@ -292,15 +315,22 @@ button:active {
   text-align: center;
   font-size: 1.05rem;
   color: var(--font-color-dark);
-  background: rgba(80, 80, 80, .25);
+  background: var(--bg-card-dark);
   border-radius: 5px;
 }
 
 #aviso button {
   height: auto;
+  min-height: 2.75rem;
   margin: .25rem 0 0 .5rem;
   padding: .35rem .9rem;
   font-size: .95rem;
+}
+
+#aviso.aviso--error {
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  color: var(--color-error);
 }
 
 .estado-busqueda {
@@ -310,6 +340,7 @@ button:active {
   line-height: 1.2;
   color: var(--font-color-title-dark);
   padding: 1rem 1rem .25rem;
+  overflow-wrap: break-word;
 }
 
 .estado-vacio {
@@ -319,6 +350,19 @@ button:active {
   font-size: 1.1rem;
   line-height: 1.7;
   color: var(--font-color-dark);
+  overflow-wrap: break-word;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 #formulario {
@@ -339,8 +383,13 @@ button:active {
 
 }
 
+@media (hover: hover) {
+  .card:hover {
+    box-shadow: 0 4px 24px rgba(255, 255, 255, .18);
+  }
+}
+
 .card:hover {
-  box-shadow: 0 4px 24px rgba(255, 255, 255, .18);
   cursor: pointer;
 }
 
@@ -378,8 +427,10 @@ button:active {
   transition: scale .4s ease;
 }
 
-.card figure img:hover {
-  scale: 1.05;
+@media (hover: hover) {
+  .card figure img:hover {
+    scale: 1.05;
+  }
 }
 
 .card h3 {
@@ -430,9 +481,7 @@ button:active {
 }
 
 .glass {
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  background: linear-gradient(to top, rgba(0, 0, 0, .9), rgba(0, 0, 0, .25));
 }
 
 .hero {
@@ -447,8 +496,10 @@ button:active {
   box-shadow: none;
 }
 
-.hero:hover {
-  box-shadow: 0 6px 30px rgba(255, 255, 255, .14);
+@media (hover: hover) {
+  .hero:hover {
+    box-shadow: 0 6px 30px rgba(255, 255, 255, .14);
+  }
 }
 
 .hero-fondo {
@@ -464,6 +515,7 @@ button:active {
   position: absolute;
   inset: 0;
   background:
+    radial-gradient(1200px 500px at 50% 0%, rgba(125, 125, 255, .07), transparent 60%),
     linear-gradient(to top, rgba(0, 0, 0, .85) 0%, rgba(0, 0, 0, .4) 50%, rgba(0, 0, 0, .06) 100%),
     linear-gradient(to right, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, .05) 65%);
 }
@@ -496,6 +548,7 @@ button:active {
   max-width: 60ch;
   line-height: 1.6;
   color: rgba(255, 255, 255, .82);
+  overflow-wrap: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -511,7 +564,7 @@ button:active {
   background: var(--font-color-title-dark);
   color: #fff;
   font-weight: 800;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 dialog {
@@ -519,7 +572,7 @@ dialog {
   height: 80vh;
   border: none;
   border-radius: 10px;
-  padding: .5rem;
+  padding: .5rem .5rem max(.5rem, env(safe-area-inset-bottom));
   position: fixed;
   inset: 0;
   margin: auto;
@@ -691,8 +744,9 @@ dialog::backdrop {
 
 #contenido-modal .enlace-credito:hover,
 #contenido-modal .enlace-credito:focus-visible {
-  color: var(--font-color-title-dark);
+  color: var(--font-color-title-hover);
   text-decoration: none;
+  outline-color: var(--font-color-title-hover);
 }
 
 #contenido-modal .credito-anio {
@@ -702,12 +756,32 @@ dialog::backdrop {
   white-space: nowrap;
 }
 
+#contenido-modal ul.creditos li:hover .credito-anio,
+#contenido-modal ul.creditos li:focus-within .credito-anio {
+  color: rgba(255, 255, 255, .85);
+}
+
+#contenido-modal p,
+#contenido-modal .sinopsis,
+#contenido-modal .biografia,
+#contenido-modal .error-modal {
+  overflow-wrap: break-word;
+}
+
+#contenido-modal .error-modal {
+  color: var(--color-error);
+}
+
+#contenido-modal .btn-reintentar-modal {
+  margin-top: .5rem;
+}
+
 #btn-cerrar-modal {
   position: absolute;
   top: 10px;
   right: 20px;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background-color: rgb(175, 24, 24);
   font-size: larger;
@@ -740,7 +814,7 @@ dialog::backdrop {
 
 footer {
   margin-top: 3rem;
-  padding: 2rem 1rem 1.5rem;
+  padding: 2rem 1rem max(1.5rem, env(safe-area-inset-bottom));
   border-top: 1px solid rgba(255, 255, 255, .12);
   background: linear-gradient(to top, rgba(255, 255, 255, .03), rgba(255, 255, 255, 0));
   display: flex;
@@ -766,6 +840,7 @@ footer {
 .pie-tagline {
   max-width: 34ch;
   color: var(--font-color-dark);
+  overflow-wrap: break-word;
 }
 
 .pie-nav ul {
@@ -790,6 +865,7 @@ footer {
   font-size: .95rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, .6);
+  overflow-wrap: break-word;
 }
 
 .pie-creditos a {
@@ -821,6 +897,10 @@ footer {
 
   #formulario {
     width: 80%;
+  }
+
+  dialog {
+    width: min(72vw, 40rem);
   }
 
   .contenedor {
@@ -879,7 +959,7 @@ footer {
   }
 
   dialog {
-    width: 50vw;
+    width: min(50vw, 44rem);
     height: fit-content;
     max-height: 85vh;
     padding: 2rem;
@@ -938,5 +1018,50 @@ footer {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  dialog[open]:before,
+  dialog[open]::after {
+    display: none;
+  }
+
+  body,
+  dialog {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  #contenido-modal p,
+  .hero-sinopsis,
+  .hero-meta,
+  .hero-titulo,
+  .pie-titulo,
+  .pie-tagline,
+  .pie-creditos,
+  .estado-vacio,
+  .estado-busqueda {
+    color: CanvasText;
+  }
+
+  a,
+  .enlace-credito,
+  .leer-mas,
+  .pie-nav a,
+  .pie-creditos a,
+  .hero-cta {
+    color: LinkText;
+  }
+
+  .card,
+  .hero {
+    border: 1px solid CanvasText;
+  }
+
+  #btn-cerrar-modal {
+    background: ButtonFace;
+    color: ButtonText;
+    border: 1px solid ButtonText;
   }
 }

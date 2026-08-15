@@ -3,6 +3,8 @@ export const API_KEY = "TU_API_KEY";
 
 export const BASE_URL = "https://api.themoviedb.org/3";
 export const IMG_URL = "https://image.tmdb.org/t/p/w500";
+export const IMG_URL_CARD = "https://image.tmdb.org/t/p/w342";
+export const IMG_URL_HERO = "https://image.tmdb.org/t/p/w780";
 
 export const GENEROS_PELICULAS_URL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=es-ES`;
 
@@ -13,3 +15,4 @@ export const API_PELI_UPCOMING = `https://api.themoviedb.org/3/movie/upcoming?ap
 
 export const API_PELI_ID = `https://api.themoviedb.org/3/movie/`;
 export const API_ACTOR_ID = `https://api.themoviedb.org/3/person/`;
+export const API_LANGUAGE = `language=es-ES`;

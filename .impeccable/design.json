@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-13T15:49:00-03:00",
+  "generatedAt": "2026-08-15T12:00:00-03:00",
   "title": "Design System: Dale Play!",
   "extensions": {
     "colorMeta": {
@@ -9,6 +9,18 @@
         "displayName": "Violeta Marquesina",
         "canonical": "rgb(125, 125, 255)",
         "tonalRamp": ["rgb(30, 30, 80)", "rgb(48, 48, 120)", "rgb(66, 66, 160)", "rgb(84, 84, 200)", "rgb(104, 104, 228)", "rgb(125, 125, 255)", "rgb(160, 160, 255)", "rgb(200, 200, 255)"]
+      },
+      "violeta-marquesina-deep": {
+        "role": "state",
+        "displayName": "Violeta Marquesina Profundo",
+        "canonical": "rgb(60, 60, 255)",
+        "tonalRamp": ["rgb(20, 20, 120)", "rgb(30, 30, 160)", "rgb(40, 40, 200)", "rgb(50, 50, 230)", "rgb(60, 60, 255)", "rgb(90, 90, 255)", "rgb(125, 125, 255)", "rgb(160, 160, 255)"]
+      },
+      "violeta-marquesina-hover": {
+        "role": "state",
+        "displayName": "Violeta Marquesina Hover",
+        "canonical": "rgb(180, 180, 255)",
+        "tonalRamp": ["rgb(90, 90, 160)", "rgb(110, 110, 185)", "rgb(130, 130, 210)", "rgb(150, 150, 235)", "rgb(165, 165, 245)", "rgb(180, 180, 255)", "rgb(205, 205, 255)", "rgb(230, 230, 255)"]
       },
       "rojo-cartelera": {
         "role": "secondary",
@@ -21,24 +33,6 @@
         "displayName": "Verde Regresar",
         "canonical": "rgb(0, 140, 0)",
         "tonalRamp": ["rgb(0, 40, 0)", "rgb(0, 60, 0)", "rgb(0, 82, 0)", "rgb(0, 104, 0)", "rgb(0, 122, 0)", "rgb(0, 140, 0)", "rgb(70, 180, 70)", "rgb(150, 220, 150)"]
-      },
-      "negro-sala": {
-        "role": "neutral",
-        "displayName": "Negro Sala",
-        "canonical": "#000000",
-        "tonalRamp": ["#000000", "#1a1a1a", "#333333", "#4d4d4d", "#666666", "#808080", "#999999", "#b3b3b3"]
-      },
-      "plata-pantalla": {
-        "role": "neutral",
-        "displayName": "Plata de Pantalla",
-        "canonical": "#cccccc",
-        "tonalRamp": ["#262626", "#3d3d3d", "#555555", "#6e6e6e", "#878787", "#a0a0a0", "#b8b8b8", "#cccccc"]
-      },
-      "blanco-pantalla": {
-        "role": "neutral",
-        "displayName": "Blanco Pantalla",
-        "canonical": "#ffffff",
-        "tonalRamp": ["#d9d9d9", "#e3e3e3", "#eaeaea", "#f0f0f0", "#f5f5f5", "#f9f9f9", "#fcfcfc", "#ffffff"]
       },
       "verde-regresar-deep": {
         "role": "state",
@@ -57,6 +51,48 @@
         "displayName": "Rojo Cerrar Profundo",
         "canonical": "rgb(134, 6, 6)",
         "tonalRamp": ["rgb(45,4,4)", "rgb(60,6,6)", "rgb(75,6,6)", "rgb(90,6,6)", "rgb(105,6,6)", "rgb(118,6,6)", "rgb(126,6,6)", "rgb(134,6,6)"]
+      },
+      "rojo-error": {
+        "role": "state",
+        "displayName": "Rojo Error",
+        "canonical": "rgb(255, 190, 190)",
+        "tonalRamp": ["rgb(120, 60, 60)", "rgb(150, 90, 90)", "rgb(180, 120, 120)", "rgb(205, 145, 145)", "rgb(230, 168, 168)", "rgb(255, 190, 190)", "rgb(255, 205, 205)", "rgb(255, 225, 225)"]
+      },
+      "rojo-error-bg": {
+        "role": "neutral",
+        "displayName": "Rojo Error Fondo",
+        "canonical": "rgba(200, 50, 50, 0.14)",
+        "tonalRamp": ["rgba(200,50,50,0.07)", "rgba(200,50,50,0.1)", "rgba(200,50,50,0.14)", "rgba(200,50,50,0.28)", "rgba(200,50,50,0.45)", "rgba(200,50,50,0.6)", "rgba(200,50,50,0.75)", "rgba(200,50,50,0.9)"]
+      },
+      "rojo-error-border": {
+        "role": "neutral",
+        "displayName": "Rojo Error Borde",
+        "canonical": "rgba(200, 50, 50, 0.35)",
+        "tonalRamp": ["rgba(200,50,50,0.2)", "rgba(200,50,50,0.28)", "rgba(200,50,50,0.35)", "rgba(200,50,50,0.5)", "rgba(200,50,50,0.65)", "rgba(200,50,50,0.8)", "rgba(200,50,50,0.9)", "rgba(200,50,50,1)"]
+      },
+      "violeta-scrollbar": {
+        "role": "neutral",
+        "displayName": "Violeta Scrollbar",
+        "canonical": "rgb(95, 95, 140)",
+        "tonalRamp": ["rgb(35, 35, 60)", "rgb(45, 45, 75)", "rgb(55, 55, 90)", "rgb(65, 65, 105)", "rgb(80, 80, 122)", "rgb(95, 95, 140)", "rgb(120, 120, 160)", "rgb(150, 150, 185)"]
+      },
+      "negro-sala": {
+        "role": "neutral",
+        "displayName": "Negro Sala",
+        "canonical": "#000000",
+        "tonalRamp": ["#000000", "#1a1a1a", "#333333", "#4d4d4d", "#666666", "#808080", "#999999", "#b3b3b3"]
+      },
+      "plata-pantalla": {
+        "role": "neutral",
+        "displayName": "Plata de Pantalla",
+        "canonical": "#cccccc",
+        "tonalRamp": ["#262626", "#3d3d3d", "#555555", "#6e6e6e", "#878787", "#a0a0a0", "#b8b8b8", "#cccccc"]
+      },
+      "blanco-pantalla": {
+        "role": "neutral",
+        "displayName": "Blanco Pantalla",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#d9d9d9", "#e3e3e3", "#eaeaea", "#f0f0f0", "#f5f5f5", "#f9f9f9", "#fcfcfc", "#ffffff"]
       },
       "gris-ficha": {
         "role": "neutral",
@@ -102,7 +138,7 @@
       "refersTo": "button-primary",
       "description": "Botón de búsqueda; el accent Violeta Marquesina como única voz de acción.",
       "html": "<button class=\"ds-btn-primary\">Buscar</button>",
-      "css": ".ds-btn-primary { background: var(--font-color-title-dark); color: #fff; font-weight: bold; font-family: var(--text-font); height: 2.5rem; padding: 0 0.5rem; font-size: 1.2rem; border: none; border-radius: 5px; transition: background-color 0.4s ease; } .ds-btn-primary:hover { background: rgb(60, 60, 255); cursor: pointer; } .ds-btn-primary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }"
+      "css": ".ds-btn-primary { background: var(--font-color-title-dark); color: #fff; font-weight: bold; font-family: var(--text-font); height: 2.75rem; padding: 0 0.5rem; font-size: 1.2rem; border: none; border-radius: 5px; transition: background-color 0.4s ease; } .ds-btn-primary:hover { background: rgb(60, 60, 255); cursor: pointer; } .ds-btn-primary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }"
     },
     {
       "name": "Regresar Button",
@@ -110,55 +146,55 @@
       "refersTo": "button-regresar",
       "description": "Botón verde para volver a la pantalla principal; verde exclusivo de este estado.",
       "html": "<button class=\"ds-btn-regresar\">Regresar</button>",
-      "css": ".ds-btn-regresar { background: rgb(0, 140, 0); color: #fff; font-weight: bold; font-family: var(--text-font); height: 2.5rem; padding: 0 0.5rem; font-size: 1.2rem; border: none; border-radius: 5px; transition: background-color 0.4s ease; } .ds-btn-regresar:hover { background: rgb(1, 90, 1); cursor: pointer; } .ds-btn-regresar:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }"
+      "css": ".ds-btn-regresar { background: rgb(0, 140, 0); color: #fff; font-weight: bold; font-family: var(--text-font); height: 2.75rem; padding: 0 0.5rem; font-size: 1.2rem; border: none; border-radius: 5px; transition: background-color 0.4s ease; } .ds-btn-regresar:hover { background: rgb(1, 90, 1); cursor: pointer; } .ds-btn-regresar:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }"
     },
     {
       "name": "Close Button",
       "kind": "button",
       "refersTo": "button-close",
-      "description": "Círculo rojo que cierra el modal de detalle.",
+      "description": "Círculo rojo que cierra el modal de detalle; objetivo táctil 44×44.",
       "html": "<button class=\"ds-btn-close\" aria-label=\"Cerrar\">X</button>",
-      "css": ".ds-btn-close { position: absolute; top: 10px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgb(175, 24, 24); color: #fff; font-size: larger; font-weight: bold; font-family: var(--text-font); border: none; cursor: pointer; } .ds-btn-close:hover { background: rgb(134, 6, 6); } .ds-btn-close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }"
+      "css": ".ds-btn-close { position: absolute; top: 10px; right: 20px; width: 44px; height: 44px; border-radius: 50%; background: rgb(175, 24, 24); color: #fff; font-size: larger; font-weight: bold; font-family: var(--text-font); border: none; cursor: pointer; } .ds-btn-close:hover { background: rgb(134, 6, 6); } .ds-btn-close:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }"
     },
     {
       "name": "Search Input",
       "kind": "input",
       "refersTo": "input-search",
-      "description": "Formulario de búsqueda: input y select en fila con el botón Buscar (violeta) y Regresar (verde); borde 14px en el panel, controles de 10px.",
+      "description": "Formulario de búsqueda: input y select en fila con el botón Buscar (violeta) y Regresar (verde); borde 14px en el panel, controles de 10px desde ≥768px.",
       "html": "<div class=\"ds-search\"><input type=\"text\" class=\"ds-input\" placeholder=\"Buscar título\"><select class=\"ds-input ds-select\"><option selected>Titulo</option><option>Actor / Actriz</option><option>Tendencias hoy</option></select><button class=\"ds-btn-primary ds-btn-cond\">Buscar</button><button class=\"ds-btn-regresar ds-btn-cond\">Regresar</button></div>",
-      "css": ".ds-search { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; } .ds-input { height: 2.5rem; font-family: var(--text-font); font-size: 1.2rem; padding: 0 0.75rem; background: #fff; color: #333; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; } .ds-select { width: 100%; } .ds-btn-cond { height: 2.5rem; padding: 0 1.25rem; border: none; border-radius: 5px; white-space: nowrap; } .ds-input:focus-visible, .ds-btn-cond:focus-visible { outline: 2px solid var(--font-color-title-dark); outline-offset: 2px; } @media (min-width: 768px) { .ds-search { flex-direction: row; align-items: center; border-radius: 14px; } .ds-input, .ds-select, .ds-btn-cond { border-radius: 10px; } .ds-input { flex: 1; min-width: 0; } .ds-btn-cond { flex-shrink: 0; } }"
+      "css": ".ds-search { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; } .ds-input { height: 2.75rem; font-family: var(--text-font); font-size: 1.2rem; padding: 0 0.75rem; background: #fff; color: #333; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; } .ds-select { width: 100%; } .ds-btn-cond { height: 2.75rem; padding: 0 1.25rem; border: none; border-radius: 5px; white-space: nowrap; } .ds-input:focus-visible, .ds-btn-cond:focus-visible { outline: 2px solid var(--font-color-title-dark); outline-offset: 2px; } @media (min-width: 768px) { .ds-search { flex-direction: row; align-items: center; border-radius: 14px; } .ds-input, .ds-select, .ds-btn-cond { border-radius: 10px; } .ds-input { flex: 1; min-width: 0; } .ds-btn-cond { flex-shrink: 0; } }"
     },
     {
       "name": "Movie Card",
       "kind": "card",
       "refersTo": "card",
-      "description": "Card de cartelera: póster 2:3 a todo el ancho con overlay glass, título truncado y metadatos en Violeta Marquesina.",
+      "description": "Card de cartelera: póster 2:3 a todo el ancho con overlay degradado, título truncado y metadatos en Violeta Marquesina.",
       "html": "<div class=\"ds-card\"><figure class=\"ds-card-fig\"></figure><div class=\"ds-card-overlay\"><h3 class=\"ds-card-title\">Dune: Part Two</h3><p class=\"ds-card-meta\"><strong>Año:</strong> 2024 <strong>Géneros:</strong> Ciencia ficción</p></div></div>",
-      "css": ".ds-card { position: relative; width: 320px; transition: box-shadow 0.4s ease; } .ds-card:hover { box-shadow: 0 4px 24px rgba(255,255,255,0.18); cursor: pointer; } .ds-card-fig { width: 100%; aspect-ratio: 2/3; margin: 0; background: linear-gradient(160deg, #2a2a3a, #000 70%); border-radius: 0; } .ds-rank { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 1; font: 400 1.35rem var(--font-display); padding: 0.35rem 0.55rem; background: rgba(0,0,0,0.55); border-radius: 4px; color: #fff; } .ds-card-overlay { position: absolute; bottom: 0; width: 100%; padding: 0 0.5rem; background: rgba(0,0,0,0.35); backdrop-filter: blur(3px); } .ds-card-title { margin: 0; font: 800 1.5rem var(--text-font); color: var(--font-color-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-card-meta { margin: 0; font: 400 1rem var(--text-font); color: var(--font-color-dark); } .ds-card-meta strong { color: var(--font-color-title-dark); }"
+      "css": ".ds-card { position: relative; width: 320px; } @media (hover: hover) { .ds-card { transition: box-shadow 0.4s ease; } .ds-card:hover { box-shadow: 0 4px 24px rgba(255,255,255,0.18); cursor: pointer; } .ds-card:hover .ds-card-title { color: var(--font-color-title-hover); } } .ds-card-fig { width: 100%; aspect-ratio: 2/3; margin: 0; overflow: hidden; background: linear-gradient(160deg, #2a2a3a, #000 70%); } .ds-card-fig img { width: 100%; height: 100%; object-fit: cover; display: block; -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent); } @media (hover: hover) { .ds-card-fig img { transition: transform 0.4s ease; } .ds-card-fig img:hover { transform: scale(1.05); } } .ds-rank { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 1; font: 400 1.35rem var(--font-display); padding: 0.35rem 0.55rem; background: rgba(0,0,0,0.55); border-radius: 4px; color: #fff; } .ds-card-overlay { position: absolute; bottom: 0; width: 100%; padding: 0 0.5rem; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.25)); } .ds-card-title { margin: 0; font: 800 1.5rem var(--text-font); color: var(--font-color-title-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-card-meta { margin: 0; font: 400 1rem var(--text-font); color: var(--font-color-dark); } .ds-card-meta strong { color: var(--font-color-title-dark); }"
     },
     {
       "name": "Hero de Portada",
       "kind": "card",
       "refersTo": "card",
-      "description": "Banner 'En cartelera hoy': backdrop de la película destacada con velo degradado, título en Prata, sinopsis y CTA. Toda la tarjeta abre el modal.",
+      "description": "Banner 'En cartelera hoy': backdrop de la película destacada con velo degradado + destello violeta, título en Prata, sinopsis y CTA. Toda la tarjeta abre el modal.",
       "html": "<div class=\"ds-hero\"><img class=\"ds-hero-fondo\" alt=\"\"><div class=\"ds-hero-velo\"></div><div class=\"ds-hero-content\"><h2 class=\"ds-hero-title\">Dune: Part Two</h2><p class=\"ds-hero-meta\">2024 · Ciencia ficción</p><p class=\"ds-hero-sinopsis\">Sinopsis de la película…</p><span class=\"ds-hero-cta\">Ver detalle</span></div></div>",
-      "css": ".ds-hero { position: relative; display: flex; align-items: flex-end; overflow: hidden; width: 100%; min-height: 16rem; margin-bottom: 1.5rem; } .ds-hero-fondo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; } .ds-hero-velo { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.06)), linear-gradient(to right, rgba(0,0,0,0.55), rgba(0,0,0,0.05)); } .ds-hero-content { position: relative; z-index: 1; padding: 2rem clamp(1rem, 4vw, 3.5rem) 2.5rem; } .ds-hero-title { margin: 0; font: 400 clamp(2rem, 5vw, 4rem)/1.05 var(--font-display); color: #fff; max-width: 20ch; } .ds-hero-meta { margin: 0.75rem 0 0; font-weight: 800; color: rgb(125, 125, 255); } .ds-hero-sinopsis { margin: 0.6rem 0 0; max-width: 60ch; line-height: 1.6; color: rgba(255,255,255,0.82); } .ds-hero-cta { display: inline-flex; margin-top: 1.25rem; padding: 0.6rem 1.4rem; border-radius: 999px; background: rgb(125, 125, 255); color: #fff; font-weight: 800; font-family: var(--text-font); font-size: 1.1rem; }"
+      "css": ".ds-hero { position: relative; display: flex; align-items: flex-end; overflow: hidden; width: 100%; min-height: 16rem; margin-bottom: 1.5rem; } .ds-hero-fondo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; } .ds-hero-velo { position: absolute; inset: 0; background: radial-gradient(1200px 500px at 50% 0%, rgba(125, 125, 255, 0.07), transparent 60%), linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.06) 100%), linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 65%); } .ds-hero-content { position: relative; z-index: 1; padding: 2rem clamp(1rem, 4vw, 3.5rem) 2.5rem; } .ds-hero-title { margin: 0; font: 400 clamp(2rem, 5vw, 4rem)/1.05 var(--font-display); color: #fff; max-width: 20ch; } .ds-hero-meta { margin: 0.75rem 0 0; font-weight: 800; color: rgb(125, 125, 255); } .ds-hero-sinopsis { margin: 0.6rem 0 0; max-width: 60ch; line-height: 1.6; color: rgba(255,255,255,0.82); } .ds-hero-cta { display: inline-flex; margin-top: 1.25rem; padding: 0.6rem 1.4rem; border-radius: 999px; background: rgb(125, 125, 255); color: #fff; font-weight: 800; font-family: var(--text-font); font-size: 1.2rem; }"
     },
     {
       "name": "Detail Modal",
       "kind": "custom",
       "refersTo": "card",
-      "description": "Modal de detalle: backdrop de la película difuminado bajo overlay oscuro, contenido centrado.",
+      "description": "Modal de detalle: backdrop de la película difuminado bajo overlay oscuro, contenido centrado, título en Prata.",
       "html": "<div class=\"ds-modal\"><div class=\"ds-modal-content\"><h2 class=\"ds-modal-title\">Dune: Part Two</h2><p class=\"ds-modal-body\">Sinopsis de la película…</p></div><button class=\"ds-btn-close\" aria-label=\"Cerrar\">X</button></div>",
-      "css": ".ds-modal { position: relative; width: 90vw; max-width: 640px; background: #000; color: #fff; border-radius: 10px; padding: 1rem; overflow: hidden; } .ds-modal::before { content: \"\"; position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: -1; } .ds-modal-content { display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 1rem; } .ds-modal-content > * { padding: 0.5rem; } .ds-modal-title { margin: 0; font: 900 1.8rem var(--text-font); color: #fff; text-align: center; } .ds-modal-body { margin: 0; font: 400 1rem var(--text-font); color: var(--font-color-dark); text-align: center; }"
+      "css": ".ds-modal { position: relative; width: 95vw; max-width: 640px; background: #000; color: #fff; border-radius: 10px; padding: 1rem; overflow: hidden; } @media (min-width: 1024px) { .ds-modal { width: 50vw; } } .ds-modal::before { content: \"\"; position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: -1; } .ds-modal-content { display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 1rem; } .ds-modal-content > * { padding: 0.5rem; } .ds-modal-title { margin: 0; font: 400 clamp(1.6rem, 3vw, 2.4rem)/1.15 var(--font-display); color: #fff; text-align: center; } .ds-modal-body { margin: 0; font: 400 1rem var(--text-font); color: var(--font-color-dark); text-align: center; }"
     },
     {
       "name": "Header Nav",
       "kind": "nav",
       "refersTo": "button-primary",
-      "description": "Encabezado: marca en Display 400 (Prata), icono de búsqueda que alterna el formulario.",
+      "description": "Encabezado: marca en Display 400 (Prata), icono de búsqueda que alterna el formulario, ambos con área de toque ≥44px.",
       "html": "<header class=\"ds-header\"><button class=\"ds-icon\" aria-label=\"Buscar\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z\"/></svg></button><h1 class=\"ds-brand\"><a>Dale Play!</a></h1></header>",
-      "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 1rem; } .ds-brand a { font: 900 2.5rem var(--text-font); color: var(--font-color-title-dark); text-decoration: none; } .ds-icon { background: none; border: none; color: var(--font-color-dark); cursor: pointer; padding: 0; } .ds-icon:focus-visible { outline: 2px solid var(--font-color-title-dark); outline-offset: 2px; }"
+      "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 1rem; } .ds-brand a { font: 400 clamp(1.9rem, 4.5vw, 3rem) var(--font-display); color: var(--font-color-title-dark); text-decoration: none; } .ds-icon { background: none; border: none; color: var(--font-color-dark); cursor: pointer; padding: 0.25rem; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; } .ds-icon:focus-visible { outline: 2px solid var(--font-color-title-dark); outline-offset: 2px; }"
     }
   ],
   "narrative": {
@@ -168,12 +204,12 @@
       "Fondo Negro Sala y texto Plata de Pantalla; los pósters son el color de la app.",
       "Un solo accent para acciones y títulos (Violeta Marquesina), un rojo reservado para encabezados de sección.",
       "Profundidad reactiva: plana en reposo, viva en hover (sombra + zoom) y en el modal (blur + overlay).",
-      "Contraste editorial: Prata serif para marca, secciones y hero; Nunito Sans para el cuerpo.",
-      "El hero de portada abre el home con el backdrop de la película destacada; el modal de detalle usa el mismo recurso."
+      "Tipografía sans redondeada y pesada (Nunito Sans): amigable, legible, directa.",
+      "El modal de detalle usa el backdrop de la película como fondo difuminado."
     ],
     "rules": [
-      { "name": "The Poster Wins Rule", "body": "El fondo y las superficies se apagan (negro, grises translúcidos) para que el arte del póster sea la única luz de la pantalla. Nada claro y saturado compite con la película.", "section": "colors" },
-      { "name": "The One Voice Rule", "body": "El accent violeta es una sola voz: títulos de marca y acciones. El rojo solo marca encabezados de sección; el verde vive únicamente en 'Regresar'. Un color, un trabajo.", "section": "colors" },
+      { "name": "The Poster Wins Rule", "body": "El fondo y las superficies se apagan (negro, grises translúcidos) para que el arte del póster sea la única luz de la pantalla. Nada claro y saturado compite con la película. El velo del hero agrega solo un destello violeta muy tenue (alpha ≤ .07) alineado al ambient del body, para que la 'marquesina' ilumine la portada sin ganarle al arte.", "section": "colors" },
+      { "name": "The One Voice Rule", "body": "El accent violeta es una sola voz: títulos de marca y acciones. El rojo marca encabezados de sección y errores; el verde vive únicamente en 'Regresar'. Un color, un trabajo.", "section": "colors" },
       { "name": "The One-Line Title Rule", "body": "Los títulos de card nunca rompen línea: white-space: nowrap con ellipsis. El póster habla; el texto no ocupa dos renglones.", "section": "typography" },
       { "name": "The Flat-By-Default Rule", "body": "En reposo no hay sombras ni relieves. La profundidad es una respuesta, nunca un estado permanente: hover en cards, modal abierto, overlay de ficha.", "section": "elevation" }
     ],
@@ -181,15 +217,17 @@
       "Do dejar que el póster domine cada card: fondo negro, overlay translúcido que nunca opaque el arte.",
       "Do usar Violeta Marquesina solo para acciones y títulos de marca; su rareza es el punto.",
       "Do truncar títulos de card a una línea con ellipsis.",
-      "Do responder al hover con luz y movimiento contenidos: luz blanca suave (0 4px 24px) + zoom 1.05 + transiciones de .4s.",
+      "Do responder al hover con luz y movimiento contenidos: sombra blanca 3px + zoom 1.05 + transiciones de .4s.",
       "Do mantener la búsqueda de tres criterios (Titulo / Actor / Tendencias) siempre visible tras el icono search.",
-      "Do reservar el movimiento para el hero (un solo momento autoral); el resto permanece calmado y respeta prefers-reduced-motion."
+      "Do mantener objetivos táctiles ≥44×44px en controles, para todo tipo de puntero.",
+      "Do usar el Rojo Error como refuerzo del error: el mensaje textual (aria-live) sigue siendo la señal primaria, el tinte acompaña."
     ],
     "donts": [
       "Don't usar fondos claros o saturados que compitan con los pósters; la sala se apaga para que la película ilumine.",
       "Don't usar el Rojo Cartelera para acciones; es para encabezados de sección.",
       "Don't añadir bordes duros o sombras permanentes; la separación la dan el negro y la luz reactiva.",
       "Don't ampliar el verde más allá del botón 'Regresar'.",
+      "Don't usar el Rojo Error fuera de los estados de error (aviso y modal); los encabezados siguen siendo Rojo Cartelera.",
       "Don't usar glows ni sombras de foco: el foco es un ring plano de 2px (violeta sobre fondos claros, blanco sobre botones)."
     ]
   }

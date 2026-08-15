@@ -4,11 +4,16 @@ description: Descubrimiento de cine en español, en una sala a oscuras
 colors:
   violeta-marquesina: "rgb(125, 125, 255)"
   violeta-marquesina-deep: "rgb(60, 60, 255)"
+  violeta-marquesina-hover: "rgb(180, 180, 255)"
   rojo-cartelera: "rgb(200, 50, 50)"
   verde-regresar: "rgb(0, 140, 0)"
   verde-regresar-deep: "rgb(1, 90, 1)"
   rojo-cerrar: "rgb(175, 24, 24)"
   rojo-cerrar-deep: "rgb(134, 6, 6)"
+  rojo-error: "rgb(255, 190, 190)"
+  rojo-error-bg: "rgba(200, 50, 50, 0.14)"
+  rojo-error-border: "rgba(200, 50, 50, 0.35)"
+  violeta-scrollbar: "rgb(95, 95, 140)"
   negro-sala: "#000"
   plata-pantalla: "#ccc"
   blanco-pantalla: "#fff"
@@ -20,7 +25,7 @@ typography:
     hero-display-max: "4rem"
     brand-display-min: "1.9rem"
     brand-display-max: "3rem"
-    seccion-display-min: "1.4rem"
+    seccion-display-min: "1.6rem"
     seccion-display-max: "2rem"
     resultado-display-min: "1.3rem"
     resultado-display-max: "1.8rem"
@@ -38,7 +43,7 @@ typography:
     fontWeight: 400
   headline:
     fontFamily: '"Prata", Georgia, "Times New Roman", serif'
-    fontSize: "clamp(1.4rem, 2.6vw, 2rem)"
+    fontSize: "clamp(1.6rem, 2.6vw, 2rem)"
     fontWeight: 400
   title:
     fontFamily: '"Nunito Sans", "Sofia Sans", Arial, Helvetica, sans-serif'
@@ -68,7 +73,7 @@ components:
     backgroundColor: "{colors.violeta-marquesina}"
     textColor: "#fff"
     rounded: "{rounded.sm}"
-    height: "2.5rem"
+    height: "2.75rem"
     padding: "0 0.5rem"
   button-primary-hover:
     backgroundColor: "{colors.violeta-marquesina-deep}"
@@ -76,21 +81,21 @@ components:
     backgroundColor: "{colors.verde-regresar}"
     textColor: "#fff"
     rounded: "{rounded.sm}"
-    height: "2.5rem"
+    height: "2.75rem"
   button-regresar-hover:
     backgroundColor: "{colors.verde-regresar-deep}"
   button-close:
     backgroundColor: "{colors.rojo-cerrar}"
     textColor: "#fff"
     rounded: "{rounded.full}"
-    size: "40px"
+    size: "44px"
   button-close-hover:
     backgroundColor: "{colors.rojo-cerrar-deep}"
   input-search:
     backgroundColor: "#fff"
     textColor: "#333"
     rounded: "{rounded.sm}"
-    height: "2.5rem"
+    height: "2.75rem"
     padding: "0 0.5rem"
   card:
     backgroundColor: "transparent"
@@ -123,7 +128,7 @@ Paleta de una sala de cine: un accent frío para actuar, un rojo para encabezado
 - **Violeta Marquesina Profundo** (rgb(60, 60, 255)): estado hover del accent, no un color independiente.
 
 ### Secondary
-- **Rojo Cartelera** (rgb(200, 50, 50)): reservado para los encabezados de sección (`h2` de "Top 10…"). Es señal de lectura, no de acción.
+- **Rojo Cartelera** (rgb(200, 50, 50)): reservado para los encabezados de sección (`h2` de "Top 10…"). Es señal de lectura, no de acción. Va a `clamp(1.6rem, 2.6vw, 2rem)` en Prata 400 para quedar siempre ≥24px ("large text", AA 3:1 sobre negro).
 
 ### Tertiary
 - **Verde Regresar** (rgb(0, 140, 0)): exclusivo del botón "Regresar" a la pantalla principal. Su hover, **Verde Regresar Profundo** (rgb(1, 90, 1)), es un estado de ese botón, no un color independiente.
@@ -136,15 +141,19 @@ Paleta de una sala de cine: un accent frío para actuar, un rojo para encabezado
 - **Gris Claro Ficha** (rgba(245, 245, 245, .3)): overlay translúcido para superficies claras (rama light definida en `:root`, no activa por defecto).
 - **Blanco Pantalla** (#fff): texto sobre botones y en el modal.
 
-### Named Rules
-**The Poster Wins Rule.** El fondo y las superficies se apagan (negro, grises translúcidos) para que el arte del póster sea la única luz de la pantalla. Nada claro y saturado compite con la película.
+### Semantic
+- **Rojo Error** (rgb(255, 190, 190) texto / rgba(200, 50, 50, .14) fondo / rgba(200, 50, 50, .35) borde): capa semántica de error en la tira `#aviso` (modificador `.aviso--error`, set desde JS con `tipo:"error"`) y en el `.error-modal` ("Ups…"). Misma familia de rojo de la casa, rol distinto: señal de estado, nunca color-solo (el texto y `aria-live` siguen mandando).
+- **Scrollbar:** el thumb usa un violeta desaturado (rgb(95, 95, 140)) sobre la pista negra, para coser la superficie con el accent sin encenderse.
 
-**The One Voice Rule.** El accent violeta es una sola voz: títulos de marca y acciones. El rojo solo marca encabezados de sección; el verde vive únicamente en "Regresar". Un color, un trabajo.
+### Named Rules
+**The Poster Wins Rule.** El fondo y las superficies se apagan (negro, grises translúcidos) para que el arte del póster sea la única luz de la pantalla. Nada claro y saturado compite con la película. El velo del hero agrega solo un destello violeta muy tenue (alpha ≤ .07) alineado al ambient del body, para que la "marquesina" ilumine la portada sin ganarle al arte.
+
+**The One Voice Rule.** El accent violeta es una sola voz: títulos de marca y acciones. El rojo marca encabezados de sección y errores; el verde vive únicamente en "Regresar". Un color, un trabajo.
 
 ## Typography
 
 **Display Font:** Prata (serif) para marca, secciones, título del hero y del modal.
-**Body Font:** Nunito Sans (con Sofia Sans, Arial, Helvetica, sans-serif)
+**Body Font:** Nunito Sans (con Arial, Helvetica, sans-serif)
 
 **Character:** El contraste es editorial-cinematográfico: los títulos en Prata (un serif frío, de catálogo de cine) y el cuerpo en Nunito Sans, humanista, redondeada y pesada. La app se lee como un catálogo de cartelera: serif para lo que brilla, sans para lo que informa.
 
@@ -153,7 +162,7 @@ Paleta de una sala de cine: un accent frío para actuar, un rojo para encabezado
 - **Headline** (Prata, 400, Rojo Cartelera): encabezados de sección "Top 10 · …" con regla fina; en violeta para los resultados de búsqueda.
 - **Title** (Nunito Sans 800, 1.5rem): títulos de película y personas dentro de las cards, truncados a una línea con ellipsis.
 - **Body** (400, Plata de Pantalla): sinopsis, biografía, fechas y metadatos en el modal y las cards.
-- **Label** (700, 1.2rem): botones, inputs y select de búsqueda; a 2.5rem de alto para toque confortable.
+- **Label** (700, 1.2rem): botones, inputs y select de búsqueda; a 2.75rem de alto (44px) para toque confortable.
 - **Rank** (Prata, 1.35rem): numeración "01…10" del Top 10, sobre un chip oscuro.
 
 ### Named Rules
@@ -174,7 +183,7 @@ Sistema **planar reactivo**: las superficies son planas en reposo; la profundida
 - **Card al hover:** sombra `0 4px 24px rgba(255,255,255,.18)` (transición .4s) y el póster escala a 1.05 (transición .4s).
 - **Hero al hover:** sombra `0 6px 30px rgba(255,255,255,.14)`.
 - **Modal:** el backdrop de la película entra como fondo con `blur(8px) grayscale(.3)`, debajo de un overlay `rgba(0,0,0,.5)`; el `::backdrop` del dialog agrega `rgba(0,0,0,.55)` con `blur(5px)` para aislar la sala.
-- **Glass:** los metadatos sobre el póster van sobre un overlay `rgba(0,0,0,.35)` con `blur(3px)`.
+- **Overlay de card:** los metadatos sobre el póster van sobre un degradado oscuro (`rgba(0,0,0,.9)` → `.25`) sin blur — la legibilidad la da el velo, no el desenfoque (barato en scroll). El blur queda reservado al modal, donde sí es un efecto específico.
 - **Entrada del hero:** un solo momento autoral — el fondo entra en cámara lenta (scale 1.06→1, 1.1s) y el contenido asciende (.9s). Todo el movimiento respeta `prefers-reduced-motion`.
 
 ### Named Rules
@@ -182,43 +191,56 @@ Sistema **planar reactivo**: las superficies son planas en reposo; la profundida
 
 ## Shapes
 
-Lenguaje de esquinas suaves y discretas: **5px** en inputs, select y botones (suficiente para sentirse táctil, no caricaturesco); **10px** en el modal; círculo completo (**50%**) para el botón de cerrar de 40px. No hay bordes visibles — la separación la hace el contraste negro/plata, no líneas (el `border: #fff` de controles solo fija color, sin grosor).
+Lenguaje de esquinas suaves y discretas: **5px** en inputs, select y botones (suficiente para sentirse táctil, no caricaturesco); **10px** en el modal; círculo completo (**50%**) para el botón de cerrar de 44px. No hay bordes visibles — la separación la hace el contraste negro/plata, no líneas; los inputs y el select llevan solo un hairline `1px rgba(255,255,255,.2)` sobre su fondo blanco, y los botones ningún borde.
 
 ## Components
 
 ### Buttons
-- **Shape:** esquinas suaves (5px), alto fijo de 2.5rem, label a 1.2rem en bold, transición de fondo .4s.
+- **Shape:** esquinas suaves (5px), alto fijo de 2.75rem (44px), label a 1.2rem en bold, transición de fondo .4s.
 - **Primary (Buscar):** fondo Violeta Marquesina, texto blanco. Hover a Violeta Marquesina Profundo.
 - **Secondary (Regresar):** fondo Verde Regresar, hover a verde profundo (rgb(1, 90, 1)).
-- **Cerrar modal:** círculo (40px, 50%), fondo Rojo Cerrar (hover Rojo Cerrar Profundo), "X" blanca. Anclado arriba a la derecha del modal.
+- **Cerrar modal:** círculo (44px, 50%), fondo Rojo Cerrar (hover Rojo Cerrar Profundo), "X" blanca. Anclado arriba a la derecha del modal.
 
 ### Inputs / Select
-- **Style:** alto 2.5rem, esquinas 5px, texto 1.2rem, padding-inline 0.5rem, fondo blanco.
+- **Style:** alto 2.75rem (44px), esquinas 5px, texto 1.2rem, padding-inline 0.5rem, fondo blanco.
 - **Focus:** ring plano de 2px (offset 2px) en Violeta Marquesina sobre el fondo blanco; los botones usan ring blanco para contrastar sobre su fondo de color. Sin glows ni sombras.
 
 ### Cards
 - **Corner Style:** rectas (sin radio); el póster llega a los bordes de la celda.
 - **Background:** transparente; figura 2:3 con `object-fit: cover`, con máscara degradada hacia abajo.
 - **Shadow Strategy:** solo al hover, ver The Flat-By-Default Rule.
-- **Overlay:** Glass (rgba(0,0,0,.15), blur 2px) al pie, con título truncado (The One-Line Title Rule), año y géneros resaltados en Violeta Marquesina.
+- **Overlay:** degradado oscuro (`rgba(0,0,0,.9)` → `.25`) al pie, sin blur, con título truncado (The One-Line Title Rule), año y géneros resaltados en Violeta Marquesina.
 - **Valoración:** medidor de 5 estrellas proporcional a la escala 0–10 (ancho = valor ÷ 10 × 100%), violeta sobre estrellas vacías grises, con el valor numérico al lado (`.estrellas-num`). Sin valoración → "(Sin info)".
 - **Internal Padding:** 0.5rem horizontal en el overlay.
 
 ### Navigation
-- **Encabezado:** marca "Dale Play!" (Display 900) enlazada al home, logo circular a la izquierda, y el icono `search` de Material Symbols (2.1rem) como botón que alterna el formulario de búsqueda. En móvil el icono se adelanta (order -2) y el logo queda a la derecha.
+- **Encabezado:** marca "Dale Play!" (Display 900) enlazada al home, logo circular a la izquierda, y el icono `search` de Material Symbols (2.1rem) como botón que alterna el formulario de búsqueda. En móvil (<768px) el logo va a la izquierda y el icono a la derecha (zona de pulgar); a partir de 768px el icono se adelanta (order -2) y el logo queda a la derecha. Todos los controles cumplen 44×44px de área de toque.
+
+### Responsive
+- **Breakpoints:** 768 / 1024 / 1440px (min-width, mobile-first). El modal de detalle es a pantalla en móvil (95vw/80vh), centrado en tablet `min(72vw, 40rem)` y en ≥1024px `min(50vw, 44rem)` (el tope evita un dialog gigante en 4K).
+- **Safe areas:** el viewport usa `viewport-fit=cover` y footer/body/dialog respetan `env(safe-area-inset-*)` para notches y home indicator.
+- **Input:** las sombras/zooms de hover (cards, hero, flechas) solo se aplican con `(hover: hover)`; los cambios de color de links/controles funcionan en touch y puntero.
+
+### Performance
+- **Imágenes:** los pósters de cards y perfiles van a `w342` con `loading="lazy"` + `decoding="async"`; el backdrop del hero (LCP) a `w780` con `fetchpriority="high"`; el póster del modal usa `decoding="async"`. `preconnect` a `api.themoviedb.org` e `image.tmdb.org`.
+- **Carga del home:** la lista de géneros y `now_playing` se piden en paralelo y el hero se pinta apenas resuelven; las otras tres secciones llegan después (stream-in).
+- **Tipografía:** solo se piden los pesos usados (400/600/700/800/900 de Nunito Sans) y Prata 400, sin eje italic ni la cara de refuerzo Sofia Sans (nunca se renderizaba).
+- **Paint:** los overlays de las cards usan degradado en vez de `backdrop-filter`; el blur queda reservado al modal (un solo elemento, abierto a demanda).
 
 ### Estado / Avisos
-- **Región `#aviso`:** tira de estado centrada (max 40rem) sobre Gris Ficha (rgba(80,80,80,.25)), radio 5px, texto Plata de Pantalla a 1.05rem con `aria-live="polite"`. Usada para cargas ("Cargando la sala…", "Buscando…") y errores con botón **Reintentar** (0.95rem). Los vacíos de búsqueda usan `.estado-vacio`: texto centrado a 1.1rem, "Probá otra palabra o mirá las tendencias".
+- **Región `#aviso`:** tira de estado centrada (max 40rem) sobre Gris Ficha (rgba(80,80,80,.25)), radio 5px, texto Plata de Pantalla a 1.05rem con `aria-live="polite"`. Usada para cargas ("Cargando la sala…", "Buscando…") y errores con botón **Reintentar** (0.95rem). Los mensajes de error distinguen motivos: autenticación (401/403), límite de solicitudes (429) y red. Los vacíos de búsqueda usan `.estado-vacio`: texto centrado a 1.1rem, "Probá otra palabra o mirá las tendencias".
+- **Formulario accesible:** el buscador usa `fieldset` + `legend` y labels asociados (`for`) ocultos visualmente con la utilidad `.sr-only` (clip 1px), para lectores de pantalla.
 
 ### Hero de Portada
 - **Fondo:** el `backdrop_path` de la película destacada en cartelera, `object-fit: cover`, bajo un velo con doble degradado (arriba y a la izquierda hacia transparente; abajo oscuro para el texto).
-- **Contenido:** anclado abajo a la izquierda: título en Prata blanco (max 20ch), año · géneros en Violeta Marquesina, sinopsis en clamp de 3 líneas (max 60ch) y el CTA "Ver detalle" en píldora violeta.
+- **Contenido:** anclado abajo a la izquierda: título en Prata blanco (max 20ch), año · géneros en Violeta Marquesina, sinopsis en clamp de 3 líneas (max 60ch) y el CTA "Ver detalle" en píldora violeta (texto blanco bold 1.2rem, cumple AA large text).
 - **Interacción:** toda la tarjeta es un `.card` con `data-id="P…"` → abre el mismo modal; `tabindex="0"`, `role="button"`, `aria-label` con el título.
 
 ### Signature Component: El Modal de Detalle
 - **Fondo:** el `backdrop_path` de la película a pantalla, difuminado (blur 8px, grayscale .3) bajo un overlay oscuro (rgba(0,0,0,.5)) y el `::backdrop` del dialog (rgba(0,0,0,.55), blur 5px).
 - **Contenido:** columna centrada (margen automático) con scroll interno para contenidos largos: título en Prata blanco, póster de la película o retrato del actor en marco 2:3 (`.poster-modal`, radio 10px, hairline `rgba(255,255,255,.14)` y sombra de overlay; solo se renderiza si existe imagen), sinopsis/biografía limitadas a 5 líneas con toggle "leer más… / leer menos…" (`.texto-ampliable` + `.leer-mas`) que aparece solo si hay excedente, metadatos con negritas en Violeta Marquesina sobre texto Plata (incluida la valoración como medidor de estrellas, igual que en las cards), el indicador de scroll (chevron ▼ anclado al borde inferior, `#indicador-scroll`) visible solo mientras el contenido desborde y no se esté al final del scroll, y el botón de cerrar circular (Rojo Cerrar). Cierra con la X (botón `type="button"`), click fuera del contenido o Esc.
-- **Créditos:** listados `.creditos` (películas del actor y actores de la película) como filas interactivas planas (regla Flat-By-Default) que iluminan con `--bg-card-light` al hover/focus-within (radio 10px, transición `hover-fade`). Los enlaces `.enlace-credito` (`data-credito-id="P…/A…"`) en blanco, una línea con ellipsis, pasan a Violeta Marquesina al hover; el año de cada película va a `.8rem` (paso `anio`) en gris suave. Reutilizan el modal para abrir la ficha correspondiente.
+- **Carga y error in-modal:** al abrir una ficha el modal muestra "Cargando la ficha…" y, si la petición falla, "Ups…" con el mensaje del motivo y un botón **Reintentar** que re-ejecuta la misma ficha; cada nueva apertura cancela la petición anterior (AbortController) para evitar carreras.
+- **Créditos:** listados `.creditos` (películas del actor y actores de la película) como filas interactivas planas (regla Flat-By-Default) que iluminan con `--bg-card-light` al hover/focus-within (radio 10px, transición `hover-fade`). Los enlaces `.enlace-credito` (`data-credito-id="P…/A…"`) en blanco, una línea con ellipsis, pasan a un violeta más claro (Violeta Hover `rgb(180,180,255)`) al hover para mantener AA sobre la fila iluminada; el año de cada película va a `.8rem` (paso `anio`) en gris suave y se aclara al hover/focus-within para seguir siendo legible. Reutilizan el modal para abrir la ficha correspondiente. Los textos largos (sinopsis, biografías, estados, pie) no se desbordan gracias a `overflow-wrap: break-word`, y bajo `forced-colors` el modal y la sala usan los colores del sistema (Canvas/CanvasText/LinkText).
 
 ## Do's and Don'ts
 
@@ -228,10 +250,13 @@ Lenguaje de esquinas suaves y discretas: **5px** en inputs, select y botones (su
 - **Do** truncar títulos de card a una línea con ellipsis.
 - **Do** responder al hover con luz y movimiento contenidos: sombra blanca 3px + zoom 1.05 + transiciones de .4s.
 - **Do** mantener la búsqueda de tres criterios (Titulo / Actor / Tendencias) siempre visible tras el icono `search`.
+- **Do** mantener objetivos táctiles ≥44×44px en controles, para todo tipo de puntero.
+- **Do** usar el Rojo Error como refuerzo del error: el mensaje textual (`aria-live`) sigue siendo la señal primaria, el tinte acompaña.
 
 ### Don't:
 - **Don't** usar fondos claros o saturados que compitan con los pósters; la sala se apaga para que la película ilumine.
 - **Don't** usar el Rojo Cartelera para acciones; es para encabezados de sección.
 - **Don't** añadir bordes duros o sombras permanentes; la separación la dan el negro y la luz reactiva.
 - **Don't** ampliar el verde más allá del botón "Regresar".
+- **Don't** usar el Rojo Error fuera de los estados de error (aviso y modal); los encabezados siguen siendo Rojo Cartelera.
 - **Don't** usar glows ni sombras de foco: el foco es un ring plano de 2px (violeta sobre fondos claros, blanco sobre botones).
